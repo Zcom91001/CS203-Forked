@@ -1,4 +1,4 @@
-name: Deploy Docker Image from Docker Hub
+name: Deploy Docker Image from Docker Hub to EC2
 
 on:
   push:
@@ -10,26 +10,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Set up SSH key for EC2 access
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
           chmod 600 ~/.ssh/ec2_key.pem
 
+      # Pull and run the Docker image on the EC2 instance
       - name: Pull and Run Docker Image on EC2
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22  # Specify SSH port, default is 22
           debug: true
           script: |
-            # Stop any existing container with the same name
+            # Ensure Docker is up-to-date
+            sudo apt-get update -y && sudo apt-get install -y docker.io
+
+            # Stop and remove any existing container with the same name
             docker stop my-container || true
             docker rm my-container || true
 
-            # Pull the Docker image from Docker Hub
-            docker pull ${{ secrets.DOCKER_USERNAME }}/cs203app:latest
+            # Pull the latest Docker image from Docker Hub
+            docker pull ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
 
-            # Run the Docker image
-            docker run -d --name my-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/cs203app:latest
+            # Remove dangling images to save space (optional)
+            docker image prune -f
+
+            # Run the Docker container
+            docker run -d \
+              --name my-container \
+              -p 8080:8080 \
+              ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
+
+            # Optional: Verify the container is running
+            docker ps -a | grep my-container
+
+      # Clean up local SSH key (optional security measure)
+      - name: Clean up SSH key
+        if: always()
+        run: rm -f ~/.ssh/ec2_key.pem
