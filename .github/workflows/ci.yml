@@ -27,8 +27,6 @@ jobs:
           port: 22  # Specify SSH port, default is 22
           debug: true
           script: |
-            # Ensure Docker is up-to-date
-            sudo yum update -y && sudo yum install -y docker.io
             
             sudo service docker start
 
