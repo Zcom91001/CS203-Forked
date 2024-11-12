@@ -28,6 +28,7 @@ jobs:
           debug: true
           script: |  
             
+            
             sudo service docker start
             # Stop and remove any existing container with the same name
             sudo docker stop my-container || true
