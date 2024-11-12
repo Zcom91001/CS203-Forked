@@ -16,6 +16,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Grant execute permissions for Gradle wrapper
+        run: chmod +x ./gradlew
+        working-directory: ./cs203system
       - name: Build with Gradle
         run: ./gradlew build
         working-directory: ./cs203system
