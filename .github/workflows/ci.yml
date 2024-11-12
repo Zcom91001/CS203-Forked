@@ -28,7 +28,9 @@ jobs:
           debug: true
           script: |
             # Ensure Docker is up-to-date
-            sudo apt-get update -y && sudo apt-get install -y docker.io
+            sudo yum update -y && sudo yum install -y docker.io
+            
+            sudo service docker start
 
             # Stop and remove any existing container with the same name
             docker stop my-container || true
@@ -36,9 +38,6 @@ jobs:
 
             # Pull the latest Docker image from Docker Hub
             docker pull ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
-
-            # Remove dangling images to save space (optional)
-            docker image prune -f
 
             # Run the Docker container
             docker run -d \
