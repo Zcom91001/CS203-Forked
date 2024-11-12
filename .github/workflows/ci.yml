@@ -28,7 +28,6 @@ jobs:
           debug: true
           script: |  
             
-            
             sudo service docker start
             # Stop and remove any existing container with the same name
             sudo docker stop my-container || true
@@ -44,7 +43,7 @@ jobs:
               ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
 
             # Optional: Verify the container is running
-            docker ps -a | grep my-container
+            docker ps -a | grep CS-203APP
 
       # Clean up local SSH key (optional security measure)
       - name: Clean up SSH key
