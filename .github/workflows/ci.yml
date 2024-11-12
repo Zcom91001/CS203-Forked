@@ -31,14 +31,14 @@ jobs:
             sudo service docker start
 
             # Stop and remove any existing container with the same name
-            docker stop my-container || true
-            docker rm my-container || true
+            sudo docker stop my-container || true
+            sudo docker rm my-container || true
 
             # Pull the latest Docker image from Docker Hub
-            docker pull ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
 
             # Run the Docker container
-            docker run -d \
+            sudo docker run -d \
               --name my-container \
               -p 8080:8080 \
               ${{ secrets.DOCKER_USERNAME }}/aws-demo:latest
