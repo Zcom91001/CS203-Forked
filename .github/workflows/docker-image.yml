@@ -23,6 +23,19 @@ jobs:
         run: ./gradlew build
         working-directory: ./cs203system
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build . --file Dockerfile --tag themoderatecow/aws-cicd:latest
+#        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         working-directory: ./cs203system
+      - name: Push to docker hub
+        run: docker push themoderatecow/aws-cicd:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+      - name: Pull from docker hub
+        run: docker pull themoderatecow/aws-cicd:latest
+#      - name: Delete old container
+#        run: docker rm -r spring-app-container
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name spring-app-container themoderatecow/aws-cicd
 
