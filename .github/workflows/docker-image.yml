@@ -26,6 +26,8 @@ jobs:
         run: docker build . --file Dockerfile --tag themoderatecow/aws-cicd:latest
 #        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         working-directory: ./cs203system
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Push to docker hub
         run: docker push themoderatecow/aws-cicd:latest
 
