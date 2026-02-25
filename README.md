@@ -147,4 +147,3 @@ Use the Swagger UI for full request/response schemas — DTO mappers keep payloa
 - Expand automated tests (backend services + frontend forms) to lock down the tournament lifecycle.
 - Replace the temporary SockJS test harness with a polished in-app notification center.
 
-Happy hacking! If you run into questions, open an issue or start a discussion describing the module (`cs203system` vs `frontend`) and reproduce steps.
